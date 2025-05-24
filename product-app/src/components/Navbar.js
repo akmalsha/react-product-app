@@ -1,24 +1,23 @@
-import { Link } from "react-router-dom";
+// components/Navbar.js
+import React from 'react';
+import { Container, Navbar, Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export default function Navbar() {
+const TopNavbar = () => {
   return (
-    <nav className="bg-indigo-600 py-4">
-      <div className="max-w-4xl mx-auto flex justify-center">
-        <div className="flex gap-20">
-          <Link
-            to="/"
-            className="text-white font-medium px-4 py-2 hover:underline"
-          >
-            Home
-          </Link>
-          <Link
-            to="/add-product"
-            className="text-white font-medium px-4 py-2 hover:underline"
-          >
-            Add Product
-          </Link>
-        </div>
-      </div>
-    </nav>
+    <Navbar expand="lg" bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand as={Link} to="/">Product App</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbar" />
+        <Navbar.Collapse id="navbar">
+          <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Nav.Link as={Link} to="/add">Add Product</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
-}
+};
+
+export default TopNavbar;

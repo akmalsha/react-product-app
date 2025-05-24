@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
+import './Dashboard.css';
+
 
 function Dashboard() {
   const [products, setProducts] = useState([]);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,126 +26,54 @@ function Dashboard() {
       });
   }, []);
 
-  // Styles
-  const outerContainer = {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    padding: "20px",
-    background: "linear-gradient(135deg, #f0f4ff, #d9e8ff)",
-  };
-
-  const containerStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: "20px",
-    borderRadius: "8px",
-    maxWidth: "1200px",
-    width: "100%",
-  };
-
-  const cardStyle = {
-    borderRadius: "12px",
-    width: "220px",
-    padding: "15px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    background: "white",
-    cursor: "pointer",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  };
-
   if (loading) {
-    return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading products...</div>;
-  }
-
-  if (error) {
     return (
-      <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>
-        Error: {error}
+      <div className="d-flex justify-content-center mt-5">
+        <Spinner animation="border" variant="primary" />
+        <span className="ms-3">Loading products...</span>
       </div>
     );
   }
 
-  return (
-    <div style={outerContainer}>
-      <h2
-        style={{
-          fontSize: "2rem",
-          marginBottom: "30px",
-          color: "#333",
-          fontWeight: "600",
-          textAlign: "center",
-        }}
-      >
-        Product Dashboard
-      </h2>
-      <div style={containerStyle}>
-        {products.map((product, index) => {
-          const isHovered = index === hoveredIndex;
-          const hoverStyle = isHovered
-            ? {
-                transform: "scale(1.05)",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
-              }
-            : {};
+  if (error) {
+    return (
+      <Alert variant="danger" className="text-center mt-5">
+        Error: {error}
+      </Alert>
+    );
+  }
 
-          return (
-            <div
-              key={product.id}
-              style={{ ...cardStyle, ...hoverStyle }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <img
+  return (
+    <Container className="mt-4">
+      <h2 className="text-center mb-4">Product Dashboard</h2>
+      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+        {products.map((product) => (
+          <Col key={product.id}>
+            <Card className="h-100 shadow-sm border-0 product-card">
+
+              <Card.Img
+                variant="top"
                 src={product.image}
-                alt={product.title}
-                style={{
-                  width: "120px",
-                  height: "120px",
-                  objectFit: "contain",
-                  marginBottom: "15px",
-                }}
+                style={{ height: "160px", objectFit: "contain", padding: "1rem" }}
               />
-              <h4
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: "600",
-                  color: "#1a202c",
-                  textAlign: "center",
-                  marginBottom: "8px",
-                }}
-                title={product.title}
-              >
-                {product.title.length > 40
-                  ? product.title.slice(0, 40) + "..."
-                  : product.title}
-              </h4>
-              <p
-                style={{
-                  color: "#4c51bf",
-                  fontWeight: "700",
-                  fontSize: "1.1rem",
-                  marginBottom: "5px",
-                }}
-              >
-                ${product.price.toFixed(2)}
-              </p>
-              <small
-                style={{ color: "#718096", textTransform: "capitalize" }}
-              >
-                {product.category}
-              </small>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+              <Card.Body className="d-flex flex-column">
+                <Card.Title style={{ fontSize: "1rem" }}>
+                  {product.title.length > 50
+                    ? product.title.slice(0, 50) + "..."
+                    : product.title}
+                </Card.Title>
+                <Card.Text className="text-primary fw-bold">
+                  ${product.price.toFixed(2)}
+                </Card.Text>
+                <Card.Text className="text-muted text-capitalize small">
+                  {product.category}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }
 
